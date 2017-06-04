@@ -1,5 +1,5 @@
 {
-  "name": "maestro",
+  "name": "asp",
   "version": "1.0.0",
   "description": "",
   "main": "bin/server",
@@ -22,7 +22,6 @@
   "homepage": "https://github.com/bikov/dockerMqTest#readme",
   "dependencies": {
     "amqplib": "^0.5.1",
-    "bluebird": "^3.5.0",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
