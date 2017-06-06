@@ -4,28 +4,27 @@
 
 let amqp = require('amqplib/callback_api');
 
-function read() {
+import {validateQuery} from './graphql/validator/requestValidator';
+
+
+
+function read(schema) {
     amqp.connect('amqp://bikov:blat@localhost', function(err, conn) {
         if(err) throw err;
         conn.createChannel(function (err, ch) {
-            var q = 'rpc_queue';
+            let q = 'rpc_queue';
 
             ch.assertQueue(q, {durable: false});
             ch.prefetch(1);
             console.log(' [x] Awaiting RPC requests');
-            ch.consume(q, function reply(msg) {
-                console.log(`got message ${msg.content.toString()}`);
-                let timeOut = 0,
-                    randomResponse = Math.random() >= 0.5;
-                if(msg.content.toString() === 'blat'){
-                    timeOut = 10000;
-                    randomResponse = 'failed'
-                }
+            ch.consume(q, function reply(query) {
+                let validationResponse = validateQuery(schema, query);
+                let timeOut = 0;
                 setTimeout(()=> {
-                    ch.sendToQueue(msg.properties.replyTo,
-                        new Buffer(randomResponse.toString()),
-                        {correlationId: msg.properties.correlationId});
-                    ch.ack(msg);
+                    ch.sendToQueue(query.properties.replyTo,
+                        new Buffer(validationResponse.toString()),
+                        {correlationId: query.properties.correlationId});
+                    ch.ack(query);
                 },timeOut);
             });
         });
