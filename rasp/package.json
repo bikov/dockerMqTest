@@ -1,10 +1,12 @@
 {
-  "name": "maestro",
+  "name": "rasp",
   "version": "1.0.0",
   "description": "",
   "main": "bin/server",
   "scripts": {
-    "test": "echo \"test not implemented yet\""
+    "test": "echo \"test not implemented yet\"",
+    "start": "node ./bin/server",
+    "builDocker" : "docker build -t bikov/rasp ."
   },
   "repository": {
     "type": "git",
@@ -22,12 +24,10 @@
   "homepage": "https://github.com/bikov/dockerMqTest#readme",
   "dependencies": {
     "amqplib": "^0.5.1",
-    "bluebird": "^3.5.0",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
-    "morgan": "~1.8.1",
-    "promise-while": "^1.0.1"
+    "morgan": "~1.8.1"
   }
 }

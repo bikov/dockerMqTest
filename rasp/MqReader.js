@@ -5,7 +5,7 @@
 let amqp = require('amqplib/callback_api');
 
 function read() {
-    amqp.connect('amqp://bikov:blat@localhost', function(err, conn) {
+    amqp.connect('amqp://bikov:blat@mq', function(err, conn) {
         if(err) throw err;
         conn.createChannel(function (err, ch) {
             var q = 'rpc_queue';

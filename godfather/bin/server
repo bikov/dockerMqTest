@@ -5,7 +5,7 @@
  */
 
 let app = require('../index'),
-    debug = require('debug')('maestro:server'),
+    debug = require('debug')('godfather:server'),
     http = require('http');
 
 /**

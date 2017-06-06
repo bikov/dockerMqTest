@@ -20,13 +20,13 @@ function sendMessages(ch) {
                 }
             }, {noAck: true});
             let message;
-            Math.random() >= 0.8 ? message = 'blat' : message = '1234';
+            Math.random() >= 0.9 ? message = 'blat' : message = '1234';
             ch.sendToQueue('rpc_queue', new Buffer(message), {correlationId: corr, replyTo: q.queue});
         })
     });
 }
 function send() {
-    amqp.connect('amqp://bikov:blat@localhost', function(err, conn) {
+    amqp.connect('amqp://bikov:blat@mq', function(err, conn) {
         if(err) throw err;
         conn.createChannel(function(err, ch) {
             if(err) throw err;
