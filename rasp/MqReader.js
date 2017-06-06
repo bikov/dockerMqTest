@@ -6,7 +6,10 @@ let amqp = require('amqplib/callback_api');
 
 function read() {
     amqp.connect('amqp://bikov:blat@mq', function(err, conn) {
-        if(err) throw err;
+        if(err) return reconnectToMq(err);
+        conn.on('close', function (reason) {
+            return reconnectToMq(reason);
+        });
         conn.createChannel(function (err, ch) {
             var q = 'rpc_queue';
 
@@ -18,7 +21,7 @@ function read() {
                 let timeOut = 0,
                     randomResponse = Math.random() >= 0.5;
                 if(msg.content.toString() === 'blat'){
-                    timeOut = 10000;
+                    timeOut = 7000;
                     randomResponse = 'failed'
                 }
                 setTimeout(()=> {
@@ -31,6 +34,11 @@ function read() {
         });
     });
 }
+function reconnectToMq(reason) {
+    console.log(`Lost connection to RMQ because:${reason}.  Reconnecting in 3 seconds...`);
+    return (setTimeout(read, 3000));
+}
+
 
 module.exports = {
     "read": read
