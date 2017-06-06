@@ -6,12 +6,14 @@ let express = require('express'),
     app = express(),
     mqReader = require('./MqReader');
 
+import {readSchema} from './graphql/schemaReader'
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-mqReader.read();
-
+let schema = readSchema("http://localhost:50159");
+mqReader.read(schema);
 
 module.exports = app;
