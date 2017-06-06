@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-let schema = readSchema("http://localhost:50159");
+let schema = readSchema("http://localhost:50159", "/?");
 mqReader.read(schema);
 
 module.exports = app;

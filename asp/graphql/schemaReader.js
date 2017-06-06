@@ -11,18 +11,18 @@ import {buildClientSchema} from 'graphql';
 import * as http from "http";
 
 
-export function readSchema(host) {
-        sendIntro(introspectionQuerySansSubscriptions, host)
+export function readSchema(host, entryPoint) {
+        sendIntro(introspectionQuerySansSubscriptions, host, entryPoint)
             .then((result) => buildClientSchema(result))
 }
 
 
-function sendIntro(introQuery, host) {
+function sendIntro(introQuery, host, entryPoint) {
     return new Promise(function (resolve, reject) {
         const post_options = {
             host: host,
             port: '80',
-            path: '/graphql',
+            path: entryPoint,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
