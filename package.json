@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/bikov/dockerMqTest#readme",
   "dependencies": {
+    "express": "^4.15.3",
     "graphql": "^0.10.1"
   }
 }

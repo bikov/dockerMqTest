@@ -1,19 +1,11 @@
-import {
-
-    introspectionQuery,
-
-    introspectionQuerySansSubscriptions,
-
-} from 'introspectionQueries';
+let introspectionQuerySansSubscriptions = require('./introspectionQueries').introspectionQuerySansSubscriptions;
+let buildClientSchema = require('graphql').buildClientSchema;
+let http = require('http');
 
 
-import {buildClientSchema} from 'graphql';
-import * as http from "http";
-
-
-export function readSchema(host, entryPoint) {
-        sendIntro(introspectionQuerySansSubscriptions, host, entryPoint)
-            .then((result) => buildClientSchema(result))
+function readSchema(host, entryPoint) {
+    sendIntro(introspectionQuerySansSubscriptions, host, entryPoint)
+        .then((result) => buildClientSchema(result))
 }
 
 
@@ -30,7 +22,7 @@ function sendIntro(introQuery, host, entryPoint) {
             }
         };
 
-        let post_req = http.request(post_options, function(res) {
+        let post_req = http.request(post_options, function (res) {
             res.setEncoding('utf8');
             res.on('data', function (chunk) {
                 resolve(chunk);
@@ -41,3 +33,7 @@ function sendIntro(introQuery, host, entryPoint) {
         post_req.end();
     })
 }
+
+module.exports = {
+    "readSchema": readSchema
+};

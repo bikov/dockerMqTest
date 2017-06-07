@@ -1,8 +1,12 @@
-import {validate} from 'graphql/validation';
-import {parse} from 'graphql/language';
+let validator = require('graphql/validation');
+let parser = require('graphql/language');
 
 
-export function validateQuery(schema, query) {
-    let errors = validate(schema, parse(query));
+ function validateQuery(schema, query) {
+    let errors = validator.validate(schema, parser.parse(query));
     return errors.length <= 0;
 }
+
+module.exports = {
+    "validateQuery": validateQuery
+};

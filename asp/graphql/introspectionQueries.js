@@ -1,4 +1,4 @@
-export {introspectionQuery} from 'graphql';
+ const introspectionQuery =  require('graphql').introspectionQuery;
 
 
 // Some GraphQL services do not support subscriptions and fail an introspection
@@ -7,7 +7,7 @@ export {introspectionQuery} from 'graphql';
 
 // query does. This backup query removes that field.
 
-export const introspectionQuerySansSubscriptions = `
+const introspectionQuerySansSubscriptions = `
 
   query IntrospectionQuery {
 
@@ -190,3 +190,8 @@ export const introspectionQuerySansSubscriptions = `
   }
 
 `;
+
+ module.exports = {
+     "introspectionQuery": introspectionQuery,
+     "introspectionQuerySansSubscriptions": introspectionQuerySansSubscriptions
+ };
