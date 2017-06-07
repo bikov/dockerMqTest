@@ -8,7 +8,7 @@ services:
       RABBITMQ_DEFAULT_PASS: "blat"
       RABBITMQ_NODENAME: "rabbit@my-rabbit"
     ports:
-      - "192.168.1.2:8080:15672"
+      - "8080:15672"
     labels:
       NAME: "rabbit"
   rasp:
