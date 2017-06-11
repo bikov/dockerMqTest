@@ -6,7 +6,7 @@ let amqp = require('amqplib/callback_api'),
     winston = require('winston');
 
 function listen() {
-    amqp.connect('amqp://bikov:blat@mq', function(err, conn) {
+    amqp.connect(process.env.MQ_URL || 'amqp://bikov:blat@localhost', function(err, conn) {
         if(err) return reconnectToMq(err);
         conn.on('close', function (reason) {
             return reconnectToMq(reason);
@@ -18,7 +18,7 @@ function listen() {
             ch.prefetch(1);
             winston.info('Listening to work');
             ch.consume(q, function reply(msg) {
-                winston.log(`got message ${msg.content.toString()}`);
+                winston.info(`got message ${msg.content.toString()}`);
                 let timeOut = 0,
                     randomResponse = Math.random() >= 0.5;
                 if(msg.content.toString() === 'blat'){
