@@ -4,14 +4,14 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     app = express(),
-    mqReader = require('./MqReader');
+    mqReader = require('./MqListener');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-mqReader.read();
+mqReader.listen();
 
 
 module.exports = app;

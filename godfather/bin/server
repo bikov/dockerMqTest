@@ -6,7 +6,15 @@
 
 let app = require('../index'),
     debug = require('debug')('godfather:server'),
-    http = require('http');
+    http = require('http'),
+    path = require('path'),
+    winstonConfigurator = require('../logging/winston-configurator'),
+    winston = require('winston');
+
+/**
+ * configure logger
+ */
+winstonConfigurator();
 
 /**
  * Get port from environment and store in Express.
@@ -54,6 +62,7 @@ function normalizePort(val) {
  */
 
 function onError(error) {
+  winston.error(`http server error:${error}`);
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -86,5 +95,6 @@ function onListening() {
       bind = typeof addr === 'string'
           ? 'pipe ' + addr
           : 'port ' + addr.port;
+  winston.info(`Listening on ${bind}`);
   debug('Listening on ' + bind);
 }
