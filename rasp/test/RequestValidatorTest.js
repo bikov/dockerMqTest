@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { StarWarsSchema } from './starWarsSchema';
 import { Source } from 'graphql/language/source';
-import { validateQuery } from '../rasp/graphql/validator/requestValidator';
+import { validateQuery } from '../graphql/validator/requestValidator';
 
 
 /**
