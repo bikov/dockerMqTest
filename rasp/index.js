@@ -5,7 +5,6 @@ let express = require('express'),
     bodyParser = require('body-parser'),
     app = express(),
     mqReader = require('./MqListener');
-    readSchema = require('./graphql/schemaReader').readSchema;
 
 
 
