@@ -11,6 +11,10 @@ services:
       - "8080:15672"
     labels:
       NAME: "rabbit"
+  redis:
+    image: "redis"
+    labels:
+      NAME: "redis"
   rasp:
     image: "bikov/rasp"
     deploy:
@@ -19,13 +23,21 @@ services:
       NAME: "rasp"
     links:
       - rabbit:mq
+      - redis:redis
     depends_on:
       - "rabbit"
+    environment:
+      MQ_URL: "amqp://bikov:blat@mq"
+      REDIS_URL: "redis"
   godfather:
       image: "bikov/godfather"
       labels:
         NAME: "godfather"
       links:
         - rabbit:mq
+        - redis:redis
       depends_on:
         - "rasp"
+      environment:
+        MQ_URL: "amqp://bikov:blat@mq"
+        REDIS_URL: "redis"

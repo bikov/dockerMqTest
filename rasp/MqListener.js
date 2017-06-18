@@ -6,7 +6,7 @@ let amqp = require('amqplib/callback_api'),
     winston = require('winston');
 
 function listen() {
-    amqp.connect('amqp://bikov:blat@mq', function(err, conn) {
+    amqp.connect(process.env.MQ_URL || 'amqp://bikov:blat@localhost', function(err, conn) {
         if(err) return reconnectToMq(err);
         conn.on('close', function (reason) {
             return reconnectToMq(reason);

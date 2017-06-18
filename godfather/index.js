@@ -3,7 +3,8 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     app = express(),
-    mqPublisher = require('./MqPublisher');
+    mqPublisher = require('./MqPublisher'),
+    redisCheck = require('./redis/redisCheck');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
