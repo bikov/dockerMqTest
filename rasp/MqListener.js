@@ -2,9 +2,10 @@
  * Created by bikov on 6/4/2017.
  */
 
-let amqp = require('amqplib/callback_api');
+let amqp = require('amqplib/callback_api'),
+    winston = require('winston');
 
-function read() {
+function listen() {
     amqp.connect('amqp://bikov:blat@mq', function(err, conn) {
         if(err) return reconnectToMq(err);
         conn.on('close', function (reason) {
@@ -15,9 +16,9 @@ function read() {
 
             ch.assertQueue(q, {durable: false});
             ch.prefetch(1);
-            console.log(' [x] Awaiting RPC requests');
+            winston.info('Listening to work');
             ch.consume(q, function reply(msg) {
-                console.log(`got message ${msg.content.toString()}`);
+                winston.info(`got message ${msg.content.toString()}`);
                 let timeOut = 0,
                     randomResponse = Math.random() >= 0.5;
                 if(msg.content.toString() === 'blat'){
@@ -35,11 +36,11 @@ function read() {
     });
 }
 function reconnectToMq(reason) {
-    console.log(`Lost connection to RMQ because:${reason}.  Reconnecting in 3 seconds...`);
-    return (setTimeout(read, 3000));
+    winston.warn(`Lost connection to RMQ because:${reason}.  Reconnecting in 3 seconds...`);
+    return (setTimeout(listen, 3000));
 }
 
 
 module.exports = {
-    "read": read
+    "listen": listen
 };

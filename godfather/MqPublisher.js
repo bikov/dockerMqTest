@@ -4,9 +4,10 @@
 
 let amqp = require('amqplib/callback_api'),
     Promise = require('bluebird'),
-    promiseWhile = require('promise-while')(Promise);
+    promiseWhile = require('promise-while')(Promise),
+    winston = require('winston');
 
-function send() {
+function publish() {
     amqp.connect('amqp://bikov:blat@mq', function(err, conn) {
         if(err) return reconnectToMq(err);
         conn.on('close', function (reason) {
@@ -32,12 +33,12 @@ function sendMessages(ch) {
             let corr = generateUuid(),
                 consumerTag = generateUuid(),
                 gotMessage = false;
-            console.log(`sending message with uuid: ${corr}`);
+            winston.info(`sending message with uuid: ${corr}`);
 
             ch.consume(q.queue, function (msg) {
                 if (msg != null && msg.properties.correlationId == corr) {
                     gotMessage=true;
-                    console.log(' [.] Got %s', msg.content.toString());
+                    winston.info(`Got :'${msg.content.toString()}' answer from worker`);
                     resolve();
                 }
             }, {consumerTag: consumerTag,noAck: true});
@@ -47,7 +48,7 @@ function sendMessages(ch) {
 
             setTimeout(()=>{
                 if(!gotMessage) {
-                    console.log(`5 seconds no response, cancelling consume to callback`);
+                    winston.warn(`5 seconds no response, cancelling consume to callback`);
                     ch.cancel(consumerTag);
                     resolve();
                 }
@@ -57,8 +58,8 @@ function sendMessages(ch) {
 }
 
 function reconnectToMq(reason) {
-    console.log(`Lost connection to RMQ because:${reason}.  Reconnecting in 3 seconds...`);
-    return (setTimeout(send, 3000));
+    winston.warn(`Lost connection to RMQ because:${reason}.  Reconnecting in 3 seconds...`);
+    return (setTimeout(publish, 3000));
 }
 
 function generateUuid() {
@@ -68,5 +69,5 @@ function generateUuid() {
 }
 
 module.exports = {
-    "read": send
+    "listen": publish
 };
