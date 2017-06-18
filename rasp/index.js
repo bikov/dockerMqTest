@@ -4,15 +4,17 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     app = express(),
-    mqReader = require('./MqReader'),
+    mqReader = require('./MqListener');
     readSchema = require('./graphql/schemaReader').readSchema;
 
 
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+mqReader.listen();
 
 // let schema = readSchema("http://localhost:50159", "/?");
 // mqReader.read(schema);

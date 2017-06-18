@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "startMq": "./startMq.sh",
-    "test": "echo \"test not implemented yet\""
+    "test": "echo \"test not implemented yet\"",
+    "buildGodfather": "cd godfather && npm run builDocker",
+    "buildRasp": "cd rasp && npm run builDocker",
+    "build": "npm run buildGodfather && npm run buildRasp"
   },
   "repository": {
     "type": "git",

@@ -1,10 +1,12 @@
 {
-  "name": "asp",
+  "name": "rasp",
   "version": "1.0.0",
   "description": "",
   "main": "bin/server",
   "scripts": {
-    "test": "echo \"test not implemented yet\""
+    "test": "echo \"test not implemented yet\"",
+    "start": "node ./bin/server",
+    "builDocker": "docker build -t bikov/rasp ."
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,8 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
-    "morgan": "~1.8.1"
+    "morgan": "~1.8.1",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.4.6"
   }
 }

@@ -1,16 +1,20 @@
 let amqp = require('amqplib/callback_api');
-let queryValidator = require('./graphql/validator/requestValidator');
+let queryValidator = require('./graphql/validator/requestValidator'),
+    winston = require('winston');
 
-function read(schema) {
-    amqp.connect('amqp://bikov:blat@localhost', function (err, conn) {
-        if (err) throw err;
+function listen(schema) {
+    amqp.connect(process.env.MQ_URL || 'amqp://bikov:blat@localhost', function(err, conn) {
+        if(err) return reconnectToMq(err);
+        conn.on('close', function (reason) {
+            return reconnectToMq(reason);
+        });
         conn.createChannel(function (err, ch) {
             let q = 'rpc_queue';
 
             ch.assertQueue(q, {durable: false});
             ch.prefetch(1);
-            console.log(' [x] Awaiting RPC requests');
-            ch.consume(q, function reply(query) {
+            winston.info('Listening to work');
+            ch.consume(q, function reply(msg) {
                 let validationResponse = queryValidator.validateQuery(schema, query);
                 let timeOut = 0;
                 setTimeout(()=> {
@@ -23,7 +27,12 @@ function read(schema) {
         });
     });
 }
+function reconnectToMq(reason) {
+    winston.warn(`Lost connection to RMQ because:${reason}.  Reconnecting in 3 seconds...`);
+    return (setTimeout(listen, 3000));
+}
+
 
 module.exports = {
-    "read": read
+    "listen": listen
 };

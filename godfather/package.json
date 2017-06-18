@@ -1,10 +1,12 @@
 {
-  "name": "maestro",
+  "name": "godfather",
   "version": "1.0.0",
   "description": "",
   "main": "bin/server",
   "scripts": {
-    "test": "echo \"test not implemented yet\""
+    "test": "echo \"test not implemented yet\"",
+    "start": "node ./bin/server",
+    "builDocker": "docker build -t bikov/godfather ."
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,9 @@
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "morgan": "~1.8.1",
-    "promise-while": "^1.0.1"
+    "promise-while": "^1.0.1",
+    "redis": "^2.7.1",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.4.6"
   }
 }
