@@ -1,5 +1,5 @@
 let amqp = require('amqplib/callback_api');
-let queryValidator = require('./graphql/validator/requestValidator'),
+let validateQuery = require('./graphql/validator/requestValidator'),
     redis = require("../godfather/redis/redis");
 winston = require('winston');
 
@@ -31,7 +31,7 @@ function listen() {
 
 function validate(request) {
     return redis.getGql(request['version'])
-        .then((schema) => queryValidator.validateQuery(schema, request["query"]));
+        .then((schema) => validateQuery(schema, request["query"]));
 }
 
 function reconnectToMq(reason) {
