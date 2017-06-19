@@ -1,6 +1,6 @@
 let amqp = require('amqplib/callback_api');
 let validateQuery = require('./graphql/validator/requestValidator'),
-    redis = require("../godfather/redis/redis");
+    redis = require("../../godfather/redis/redis");
 winston = require('winston');
 
 

@@ -1,4 +1,4 @@
-let validator = require('graphql/validation');
+import {validator} from 'graphql/validation';
 let parser = require('graphql/language');
 
 
