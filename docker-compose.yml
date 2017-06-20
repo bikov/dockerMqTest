@@ -23,8 +23,6 @@ services:
       ipv4_address: 172.16.238.102
   rasp:
     image: "bikov/rasp"
-    deploy:
-      replicas: 3
     labels:
       NAME: "rasp"
     links:
