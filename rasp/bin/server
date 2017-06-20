@@ -92,3 +92,5 @@ function onListening() {
   winston.info(`Listening on ${bind}`);
   debug('Listening on ' + bind);
 }
+
+winston.info(`running in docker by id ${process.env.HOSTNAME}`);

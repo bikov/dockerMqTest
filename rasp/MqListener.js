@@ -6,6 +6,7 @@ let amqp = require('amqplib/callback_api'),
     winston = require('winston');
 
 function listen() {
+    let dockerid = process.env.HOSTNAME || 'unnable to find docker id';
     amqp.connect(process.env.MQ_URL || 'amqp://bikov:blat@localhost', function(err, conn) {
         if(err) return reconnectToMq(err);
         conn.on('close', function (reason) {
@@ -19,6 +20,9 @@ function listen() {
             winston.info('Listening to work');
             ch.consume(q, function reply(msg) {
                 winston.info(`got message ${msg.content.toString()}`);
+                ch.sendToQueue(msg.properties.replyTo,
+                    new Buffer(dockerid),
+                    {correlationId: msg.properties.correlationId});
                 let timeOut = 0,
                     randomResponse = Math.random() >= 0.5;
                 if(msg.content.toString() === 'blat'){
