@@ -1,4 +1,4 @@
-version: '2.1'
+version: '2'
 services:
   rabbit:
     image: "rabbitmq:3-management"
@@ -10,8 +10,8 @@ services:
     ports:
       - "8080:15672"
     networks:
-      app_net:
-        ipv4_address: 172.16.238.101
+      vpcbr:
+        ipv4_address: 10.5.0.6
     labels:
       NAME: "rabbit"
   redis:
@@ -19,8 +19,8 @@ services:
     labels:
       NAME: "redis"
   networks:
-    app_net:
-      ipv4_address: 172.16.238.102
+    vpcbr:
+      ipv4_address: 10.5.0.6
   rasp:
     image: "bikov/rasp"
     labels:
@@ -49,13 +49,9 @@ services:
         REDIS_URL: "redis"
 
 networks:
-  app_net:
+  vpcbr:
     driver: bridge
-    enable_ipv6: true
     ipam:
-      driver: default
-      config:
-      -
-        subnet: 172.16.238.0/24
-      -
-        subnet: 2001:3984:3989::/64
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
