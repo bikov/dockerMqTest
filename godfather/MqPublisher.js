@@ -31,21 +31,24 @@ function sendMessages(ch, id) {
             ch.consume(q.queue, function (msg) {
                 let message,
                     gotMessage = false;
-                if (msg && !workingDockerId) {
-                    winston.info(`working docker id is:${msg.content.toString()}`);
-                    workingDockerId = msg.content.toString();
-                    setTimeout(()=> {
-                        if (!gotMessage) {
-                            killDocker(workingDockerId, ch, q, consumerTag, resolve);
-                        }
-                    }, 5000)
-                }
-                else if (msg && msg.properties.correlationId == corr) {
-                    gotMessage = true;
-                    winston.info(`Got :'${msg.content.toString()}' answer from worker. my id is: ${id}`);
-                    ch.deleteQueue(q.queue);
-                    ch.cancel(consumerTag);
-                    resolve();
+                if(msg && msg.properties.correlationId == corr)
+                {
+                    if(!workingDockerId){
+                        winston.info(`working docker id is:${msg.content.toString()}`);
+                        workingDockerId = msg.content.toString();
+                        setTimeout(()=> {
+                            if (!gotMessage) {
+                                killDocker(workingDockerId, ch, q, consumerTag, resolve);
+                            }
+                        }, 5000)
+                    }
+                    else{
+                        gotMessage = true;
+                        winston.info(`Got :'${msg.content.toString()}' answer from worker. my id is: ${id}`);
+                        ch.deleteQueue(q.queue);
+                        ch.cancel(consumerTag);
+                        resolve();
+                    }
                 }
             }, {consumerTag: consumerTag,noAck: true});
             Math.random() >= 0.9 ? message = 'blat'+new Date().getTime() : message = '1234';

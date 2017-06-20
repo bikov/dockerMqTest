@@ -11,10 +11,9 @@ function restartDocker(id, cb = ()=>{}) {
             container = docker.getContainer(id);
 
         container.kill({t:0})
-            // .then(function (container) {
-            //     return container.remove()
-            // })
-            .then(function (data) {
+            .then(function (container) {
+                return container.remove()
+            }).then(function (data) {
             winston.info(`container by id ${id} killed and removed`)
         }).then(() => docker.createContainer({
             Image: 'bikov/rasp',
