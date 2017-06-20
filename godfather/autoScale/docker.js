@@ -17,9 +17,17 @@ function restartDocker(id, cb = ()=>{}) {
             winston.info(`container by id ${id} killed and removed`)
         }).then(() => docker.createContainer({
             Image: 'bikov/rasp',
-            HostConfig:{
-                Links: ["dockermqtest_rabbit_1:mq","dockermqtest_redis_1:redis"]
-            }}))
+            // HostConfig:{
+            //     Links: ["dockermqtest_rabbit_1:mq","dockermqtest_redis_1:redis"]
+            // },
+            NetworkingConfig:{
+                EndpointsConfig:{
+                    dockermqtest_default:{
+                        Links:["dockermqtest_rabbit_1:mq","dockermqtest_redis_1:redis"]
+                    }
+                }
+            }
+        }))
             .then((container) => {
                 winston.info(`container by id ${container.id} started!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`)
                 return container.start()
