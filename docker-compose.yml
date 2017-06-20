@@ -52,7 +52,7 @@ services:
 
 networks:
   vpcbr:
-    driver: bridge
+    network_mode: "bridge"
       enable_ipv6: true
       ipam:
         driver: default
