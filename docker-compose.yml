@@ -53,11 +53,9 @@ services:
 networks:
   vpcbr:
     driver: bridge
-        enable_ipv6: true
-        ipam:
-          driver: default
-          config:
-          -
-            subnet: 172.16.238.0/24
-          -
-            subnet: 2001:3984:3989::/64
+      enable_ipv6: true
+      ipam:
+        driver: default
+        config:
+        - subnet: 172.16.238.0/24
+        - subnet: 2001:3984:3989::/64
