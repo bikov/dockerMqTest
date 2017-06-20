@@ -15,8 +15,15 @@ function restartDocker(id, cb = ()=>{}) {
                 return container.remove()
             }).then(function (data) {
             winston.info(`container by id ${id} killed and removed`)
-        }).then(() => createRaspContainer(docker))
-            .then((container) => container.start())
+        }).then(docker.createContainer({
+            Image: 'bikov/rasp',
+            HostConfig:{
+                Links: ["rabbit:mq","redis:redis"]
+            }}))
+            .then((container) => {
+                winston.info(`container by id ${container.id} started!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`)
+                return container.start()
+            })
             .then((container) => winston.info(`container with id ${container.id} started`))
             .then(resolve)
             .catch((err) => {
@@ -46,7 +53,6 @@ function createRaspContainer(docker) {
         HostConfig:{
             Links: ["rabbit:mq","redis:redis"]
         }
-
     })
 }
 
