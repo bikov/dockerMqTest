@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   rabbit:
     image: "rabbitmq:3-management"
@@ -9,20 +9,16 @@ services:
       RABBITMQ_NODENAME: "rabbit@my-rabbit"
     ports:
       - "8080:15672"
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.6
     labels:
       NAME: "rabbit"
   redis:
     image: "redis"
     labels:
       NAME: "redis"
-  networks:
-    vpcbr:
-      ipv4_address: 10.5.0.6
   rasp:
     image: "bikov/rasp"
+    deploy:
+      replicas: 3
     labels:
       NAME: "rasp"
     links:
@@ -37,8 +33,6 @@ services:
       image: "bikov/godfather"
       labels:
         NAME: "godfather"
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
       links:
         - rabbit:mq
         - redis:redis
@@ -47,11 +41,3 @@ services:
       environment:
         MQ_URL: "amqp://bikov:blat@mq"
         REDIS_URL: "redis"
-
-networks:
-  - vpcbr:
-    driver: bridge
-    ipam:
-     config:
-       - subnet: 10.5.0.0/16
-         gateway: 10.5.0.1
