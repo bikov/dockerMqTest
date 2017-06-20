@@ -43,7 +43,7 @@ function killDocker(workingDockerId, ch, q, consumerTag, resolve) {
     ch.deleteQueue(q.queue);
     ch.cancel(consumerTag);
     dockerHelper.restartDocker(workingDockerId).then(resolve).catch(()=> {
-        winston.log(`unnable to kill container with id ${workingDockerId}`);
+        winston.error(`unnable to kill container with id ${workingDockerId}`);
         resolve();
     })
     //resolve();
