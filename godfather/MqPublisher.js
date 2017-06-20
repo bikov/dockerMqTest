@@ -15,7 +15,7 @@ function publish(id) {
         });
         conn.createChannel(function(err, ch) {
             if(err) throw err;
-            setInterval(()=>sendMessages(ch,id),500);
+            setInterval(()=>sendMessages(ch,id),1000);
         });
     });
 }
@@ -26,11 +26,11 @@ function sendMessages(ch, id) {
             if (err) throw err;
             let corr = generateUuid(),
                 workingDockerId = null,
+                gotMessage = false,
                 consumerTag = generateUuid();
             winston.info(`sending message with uuid: ${corr} from id: ${id}`);
             ch.consume(q.queue, function (msg) {
-                let message,
-                    gotMessage = false;
+                let message;
                 if(msg && msg.properties.correlationId == corr)
                 {
                     if(!workingDockerId){
@@ -44,7 +44,7 @@ function sendMessages(ch, id) {
                     }
                     else{
                         gotMessage = true;
-                        winston.info(`Got :'${msg.content.toString()}' answer from worker. my id is: ${id}`);
+                        winston.info(`Got :'${msg.content.toString()}' answer from worker. his id is: ${workingDockerId}`);
                         ch.deleteQueue(q.queue);
                         ch.cancel(consumerTag);
                         resolve();
