@@ -30,7 +30,6 @@ function sendMessages(ch, id) {
             winston.info(`sending message with uuid: ${corr} from id: ${id}`);
             ch.consume(q.queue, function (msg) {
                 let message,
-
                     gotMessage = false;
                 if (msg && !workingDockerId) {
                     winston.info(`working docker id is:${msg.content.toString()}`);
