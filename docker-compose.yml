@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:15672"
     networks:
-      ovl_net:
+      app_net:
         ipv4_address: 172.16.238.101
     labels:
       NAME: "rabbit"
@@ -19,7 +19,7 @@ services:
     labels:
       NAME: "redis"
   networks:
-    ovl_net:
+    app_net:
       ipv4_address: 172.16.238.102
   rasp:
     image: "bikov/rasp"
@@ -51,6 +51,13 @@ services:
         REDIS_URL: "redis"
 
 networks:
-  ovl_net:
-    external:
-      name: test_overlay
+  app_net:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 172.16.238.0/24
+      -
+        subnet: 2001:3984:3989::/64
