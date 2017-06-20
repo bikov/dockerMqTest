@@ -9,12 +9,18 @@ services:
       RABBITMQ_NODENAME: "rabbit@my-rabbit"
     ports:
       - "8080:15672"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.1
     labels:
       NAME: "rabbit"
   redis:
     image: "redis"
     labels:
       NAME: "redis"
+  networks:
+    vpcbr:
+      ipv4_address: 10.5.0.2
   rasp:
     image: "bikov/rasp"
     deploy:
@@ -43,3 +49,11 @@ services:
       environment:
         MQ_URL: "amqp://bikov:blat@mq"
         REDIS_URL: "redis"
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
