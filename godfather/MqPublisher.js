@@ -25,11 +25,29 @@ function sendMessages(ch, id) {
         ch.assertQueue('', {exclusive: true}, function (err, q) {
             if (err) throw err;
             let corr = generateUuid(),
+                workingDockerId = null,
                 consumerTag = generateUuid();
             winston.info(`sending message with uuid: ${corr} from id: ${id}`);
-
             ch.consume(q.queue, function (msg) {
-                onMessage(msg, ch, q, consumerTag, resolve, corr, id);
+                let message,
+
+                    gotMessage = false;
+                if (msg && !workingDockerId) {
+                    winston.info(`working docker id is:${msg.content.toString()}`);
+                    workingDockerId = msg.content.toString();
+                    setTimeout(()=> {
+                        if (!gotMessage) {
+                            killDocker(workingDockerId, ch, q, consumerTag, resolve);
+                        }
+                    }, 5000)
+                }
+                else if (msg && msg.properties.correlationId == corr) {
+                    gotMessage = true;
+                    winston.info(`Got :'${msg.content.toString()}' answer from worker. my id is: ${id}`);
+                    ch.deleteQueue(q.queue);
+                    ch.cancel(consumerTag);
+                    resolve();
+                }
             }, {consumerTag: consumerTag,noAck: true});
             Math.random() >= 0.9 ? message = 'blat'+new Date().getTime() : message = '1234';
             ch.sendToQueue('rpc_queue', new Buffer(message + `id:${id}`), {correlationId: corr, replyTo: q.queue,expiration:3000});
@@ -49,25 +67,7 @@ function killDocker(workingDockerId, ch, q, consumerTag, resolve) {
     //resolve();
 }
 function onMessage(msg, ch, q, consumerTag, resolve, corr, id) {
-    let message,
-        workingDockerId = null,
-        gotMessage = false;
-    if (msg && !workingDockerId) {
-        winston.info(`working docker id is:${msg.content.toString()}`);
-        workingDockerId = msg.content.toString();
-        setTimeout(()=> {
-            if (!gotMessage) {
-                killDocker(workingDockerId, ch, q, consumerTag, resolve);
-            }
-        }, 5000)
-    }
-    else if (msg && msg.properties.correlationId == corr) {
-        gotMessage = true;
-        winston.info(`Got :'${msg.content.toString()}' answer from worker. my id is: ${id}`);
-        ch.deleteQueue(q.queue);
-        ch.cancel(consumerTag);
-        resolve();
-    }
+
 }
 
 function reconnectToMq(reason) {
