@@ -7,9 +7,6 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY . /usr/src/app
 
-# Copy docker.sock
-COPY //var/run/docker.sock /var/run/docker.sock
-
 # Install app dependencies
 RUN npm install
 

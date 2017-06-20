@@ -33,6 +33,8 @@ services:
       image: "bikov/godfather"
       labels:
         NAME: "godfather"
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
       links:
         - rabbit:mq
         - redis:redis
