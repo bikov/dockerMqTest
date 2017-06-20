@@ -49,7 +49,7 @@ services:
         REDIS_URL: "redis"
 
 networks:
-  vpcbr:
+  - vpcbr:
     driver: bridge
     ipam:
      config:
