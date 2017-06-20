@@ -15,7 +15,7 @@ function publish(id) {
         });
         conn.createChannel(function(err, ch) {
             if(err) throw err;
-            setInterval(()=>sendMessages(ch,id),1000);
+            setInterval(()=>sendMessages(ch,id),500);
         });
     });
 }
