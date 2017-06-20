@@ -17,6 +17,7 @@ function restartDocker(id, cb = ()=>{}) {
             winston.info(`container by id ${id} killed and removed`)
         }).then(() => docker.createContainer({
             Image: 'bikov/rasp',
+            Env:["MQ_URL=amqp://bikov:blat@mq","REDIS_URL=redis"],
             // HostConfig:{
             //     Links: ["dockermqtest_rabbit_1:mq","dockermqtest_redis_1:redis"]
             // },
