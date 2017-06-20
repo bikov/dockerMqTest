@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:15672"
     networks:
-      internal:
+      ovl_net:
         ipv4_address: 172.16.238.101
     labels:
       NAME: "rabbit"
@@ -19,7 +19,7 @@ services:
     labels:
       NAME: "redis"
   networks:
-    internal:
+    ovl_net:
       ipv4_address: 172.16.238.102
   rasp:
     image: "bikov/rasp"
