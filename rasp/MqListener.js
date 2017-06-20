@@ -25,7 +25,7 @@ function listen() {
                     {correlationId: msg.properties.correlationId});
                 let timeOut = 0,
                     randomResponse = Math.random() >= 0.5;
-                if(msg.content.toString() === 'blat'){
+                if(msg.content.toString().startsWith('blat')){
                     timeOut = 7000;
                     randomResponse = 'failed'
                 }
