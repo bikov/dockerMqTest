@@ -52,5 +52,5 @@ services:
 
 networks:
   ovl_net:
-    internal:
+    external:
       name: test_overlay
