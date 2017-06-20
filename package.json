@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "startMq": "./startMq.sh",
-    "test": "mocha --require babel-core/register",
+    "test": "babel test -d tests && mocha --require babel-core/register",
     "buildGodfather": "cd godfather && npm run builDocker",
     "buildRasp": "cd rasp && npm run builDocker",
     "build": "npm run buildGodfather && npm run buildRasp"
