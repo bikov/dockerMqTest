@@ -29,6 +29,20 @@ services:
     environment:
       MQ_URL: "amqp://bikov:blat@mq"
       REDIS_URL: "redis"
+  rasp2:
+      image: "bikov/rasp"
+      deploy:
+        replicas: 3
+      labels:
+        NAME: "rasp2"
+      links:
+        - rabbit:mq
+        - redis:redis
+      depends_on:
+        - "rabbit"
+      environment:
+        MQ_URL: "amqp://bikov:blat@mq"
+        REDIS_URL: "redis"
   godfather:
       image: "bikov/godfather"
       labels:

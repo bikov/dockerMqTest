@@ -3,14 +3,15 @@ let express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     app = express(),
-    mqPublisher = require('./MqPublisher'),
-    redisCheck = require('./redis/redisCheck');
+    mqPublisher = require('./MqPublisher');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-mqPublisher.listen();
 
+mqPublisher.listen(1);
+// mqPublisher.listen(2);
+// mqPublisher.listen(3);
 
 module.exports = app;
