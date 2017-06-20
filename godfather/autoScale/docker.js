@@ -15,10 +15,10 @@ function restartDocker(id, cb = ()=>{}) {
                 return container.remove()
             }).then(function (data) {
             winston.info(`container by id ${id} killed and removed`)
-        }).then(docker.createContainer({
+        }).then(() => docker.createContainer({
             Image: 'bikov/rasp',
             HostConfig:{
-                Links: ["rabbit:mq","redis:redis"]
+                Links: ["dockermqtest_rabbit_1:mq","dockermqtest_redis_1:redis"]
             }}))
             .then((container) => {
                 winston.info(`container by id ${container.id} started!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`)
