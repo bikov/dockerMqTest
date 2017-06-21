@@ -14,7 +14,7 @@ function listen() {
         });
         conn.on('error',function (error) {
             winston.error(`mq chanel error: ${error}`)
-        })
+        });
         conn.createChannel(function (err, ch) {
             var q = 'rpc_queue';
 
