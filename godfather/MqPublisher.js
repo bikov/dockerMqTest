@@ -42,7 +42,7 @@ function sendMessages(ch, id) {
                                 winston.warn(`time out rerached and not got message for uuid:${corr}`);
                                 killDocker(workingDockerId, ch, q, consumerTag, resolve);
                             }
-                        }, 5000)
+                        }, 2000)
                     }
                     else{
                         gotMessage = true;
