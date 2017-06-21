@@ -54,14 +54,11 @@ function sendMessages(ch, id) {
             }, {consumerTag: consumerTag,noAck: true});
             Math.random() >= 0.9 ? message = 'blat'+new Date().getTime() : message = '1234';
             ch.sendToQueue('rpc_queue', new Buffer(message + `id:${id}`), {correlationId: corr, replyTo: q.queue,expiration:3000})
-                .then(()=>
-                {
-                    winston.info('setting timeout!-------------------------------------------------------------------------------------------');
-                    setTimeout(()=>{
-                        if(!workingDockerId)
-                            winston.error(`message by uuid: ${corr} expired and lost!`)
-                    },300)
-                })
+            winston.info('setting timeout!-------------------------------------------------------------------------------------------');
+            setTimeout(()=>{
+                if(!workingDockerId)
+                    winston.error(`message by uuid: ${corr} expired and lost!`)
+            },3000)
         })
     });
 }
