@@ -23,30 +23,36 @@ function listen() {
             winston.info('Listening to work');
             ch.consume(q, function reply(msg) {
                 if(msg.fields.redelivered){
-                    winston.warn(`got redelivered message!!!! send ack for this message to delete from Q`)
+                    winston.error(`got redelivered message!!!! send ack for this message to delete from Q!!!!!!!!!!!!!`);
                     ch.ack(msg);
                 }
-                winston.info(`got message ${msg.content.toString()} with uuid: ${msg.properties.correlationId}`);
-                ch.sendToQueue(msg.properties.replyTo,
-                    new Buffer(dockerid),
-                    {correlationId: msg.properties.correlationId});
-                let timeOut = 0,
-                    randomResponse = Math.random() >= 0.5;
-                if(msg.content.toString().startsWith('blat')){
-                    timeOut = 7000;
-                    winston.info(`message with uuid: ${msg.properties.correlationId} going to slip for ${timeOut}ms`);
-                    randomResponse = 'failed'
-                }
-                setTimeout(()=> {
-                    try {
-                        ch.sendToQueue(msg.properties.replyTo,
-                            new Buffer(randomResponse.toString()),
-                            {correlationId: msg.properties.correlationId});
-                        ch.ack(msg);
-                    }catch(err) {
-                        winston.error(`unnable to return answer for work: ${msg.properties.correlationId} because : ${err}`);
+                else {
+                    winston.info(`got message ${msg.content.toString()} with uuid: ${msg.properties.correlationId}`);
+                    ch.sendToQueue(msg.properties.replyTo,
+                        new Buffer(dockerid),
+                        {correlationId: msg.properties.correlationId});
+                    let timeOut = 0,
+                        randomResponse = Math.random() >= 0.5;
+                    if (msg.content.toString().startsWith('blat')) {
+                        timeOut = 7000;
+                        winston.info(`message with uuid: ${msg.properties.correlationId} going to slip for ${timeOut}ms`);
+                        randomResponse = 'failed'
                     }
-                },timeOut);
+                    setTimeout(()=> {
+                        try {
+                            ch.sendToQueue(msg.properties.replyTo,
+                                new Buffer(randomResponse.toString()),
+                                {correlationId: msg.properties.correlationId});
+                            if (timeOut != 7000)
+                                ch.ack(msg);
+                            else {
+                                conn.close();
+                            }
+                        } catch (err) {
+                            winston.error(`unnable to return answer for work: ${msg.properties.correlationId} because : ${err}`);
+                        }
+                    }, timeOut);
+                }
             });
         });
     });
