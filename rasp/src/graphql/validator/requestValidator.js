@@ -1,5 +1,5 @@
-import {validator} from 'graphql/validation';
 let parser = require('graphql/language');
+let validator = require('graphql/validation');
 
 
  function validateQuery(schema, query) {
