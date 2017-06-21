@@ -30,7 +30,7 @@ function listen() {
                     randomResponse = Math.random() >= 0.5;
                 if(msg.content.toString().startsWith('blat')){
                     timeOut = 7000;
-                    winston.info(`message with uuid: ${msg.properties.correlationId} going to slip for ${timeOut}ms`);
+                    winston.wern(`message with uuid: ${msg.properties.correlationId} going to slip for ${timeOut}ms`);
                     randomResponse = 'failed'
                 }
                 setTimeout(()=> {
