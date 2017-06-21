@@ -6,13 +6,16 @@
     "work_q": "rpc_queue"
   },
   "scale":{
-    "inspectInterval" : 1000,
+    "inspectInterval" : 500,
     "extraRaspsIncrease" : 0.3
   },
+  "security":{
+    "waitUntillKillInMs":2000
+  }
   "raspImageName": "bikov/rasp",
   "test":{
-    "sendingMessageIntervalInMs":0,
-    "chanceOfFail":0.9
+    "sendingMessageIntervalInMs":100,
+    "chanceOfFail":0.1
   },
   "onDockers":false
 }
