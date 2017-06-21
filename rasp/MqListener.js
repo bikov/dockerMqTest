@@ -12,9 +12,6 @@ function listen() {
         conn.on('close', function (reason) {
             return reconnectToMq(reason);
         });
-        conn.on('error', (err) =>{
-            winston.error(`rabbit mq connection error: ${err}`);
-        });
         conn.createChannel(function (err, ch) {
             var q = 'rpc_queue';
 
@@ -30,7 +27,7 @@ function listen() {
                     randomResponse = Math.random() >= 0.5;
                 if(msg.content.toString().startsWith('blat')){
                     timeOut = 7000;
-                    winston.wern(`message with uuid: ${msg.properties.correlationId} going to slip for ${timeOut}ms`);
+                    winston.info(`message with uuid: ${msg.properties.correlationId} going to slip for ${timeOut}ms`);
                     randomResponse = 'failed'
                 }
                 setTimeout(()=> {
@@ -40,7 +37,7 @@ function listen() {
                             {correlationId: msg.properties.correlationId});
                         ch.ack(msg);
                     }catch(err) {
-                        winston.error(`unnable to return answer for work: ${msg.properties.correlationId}`);
+                        winston.error(`unnable to return answer for work: ${msg.properties.correlationId} because : ${err}`);
                     }
                 },timeOut);
             });
