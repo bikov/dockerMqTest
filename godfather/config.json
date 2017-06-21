@@ -9,5 +9,8 @@
     "inspectInterval" : 1000,
     "extraRaspsCount" : 3
   },
-  "raspImageName": "bikov/rasp"
+  "raspImageName": "bikov/rasp",
+  "test":{
+    "sendingMessageIntervalInMs":100
+  }
 }

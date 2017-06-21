@@ -5,7 +5,8 @@
 let amqp = require('amqplib/callback_api'),
     Promise = require('bluebird'),
     winston = require('winston'),
-    dockerHelper = require('./autoScale/docker');
+    dockerHelper = require('./autoScale/docker'),
+    config = require('./config.json');
 
 function publish(id) {
     amqp.connect(process.env.MQ_URL || 'amqp://bikov:blat@localhost', function(err, conn) {
@@ -15,7 +16,7 @@ function publish(id) {
         });
         conn.createChannel(function(err, ch) {
             if(err) throw err;
-            setInterval(()=>sendMessages(ch,id),250);
+            setInterval(()=>sendMessages(ch,id),config.test.sendingMessageIntervalInMs);
         });
     });
 }
