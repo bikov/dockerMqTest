@@ -1,0 +1,8 @@
+{
+  "rabbitmq": {
+    "url": "mq",
+    "user": "bikov",
+    "password": "blat",
+    "work_q": "rpc_queue"
+  }
+}

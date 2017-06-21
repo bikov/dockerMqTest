@@ -4,7 +4,7 @@
 let Docker = require('dockerode'),
     winston = require('winston');
 
-function restartDocker(id, cb = ()=>{}) {
+function restartRaspDocker(id, cb = ()=>{}) {
     return new Promise((resolve,reject)=> {
         winston.info(`restarting container with id  ${id}`);
         let docker = new Docker(),
@@ -14,22 +14,8 @@ function restartDocker(id, cb = ()=>{}) {
             .then(function (container) {
                 return container.remove()
             }).then(function (data) {
-            winston.info(`container by id ${id} killed and removed`)
-        }).then(() => docker.createContainer({
-            Image: 'bikov/rasp',
-            Env:["MQ_URL=amqp://bikov:blat@mq","REDIS_URL=redis"],
-            NetworkingConfig:{
-                EndpointsConfig:{
-                    dockermqtest_default:{
-                        Links:["dockermqtest_rabbit_1:mq","dockermqtest_redis_1:redis"]
-                    }
-                }
-            }
-        }))
-            .then((container) => {
-                winston.info(`container by id ${container.id} started!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`)
-                return container.start()
-            })
+                winston.info(`container by id ${id} killed and removed`)
+            }).then(() => startNewRasp(docker))
             .then((container) => {
                 winston.info(`container with id ${container.id} started`);
                 resolve(container);
@@ -43,15 +29,30 @@ function restartDocker(id, cb = ()=>{}) {
         });
 }
 
-function createRaspContainer(docker) {
-    return docker.createContainer({
-        Image: 'bikov/rasp',
-        HostConfig:{
-            Links: ["rabbit:mq","redis:redis"]
-        }
+function startNewRasp(docker, cb = ()=>{}) {
+    return new Promise(function (resolve, reject) {
+        docker.createContainer({
+            Image: 'bikov/rasp',
+            Env: ["MQ_URL=amqp://bikov:blat@mq", "REDIS_URL=redis"],
+            NetworkingConfig: {
+                EndpointsConfig: {
+                    dockermqtest_default: {
+                        Links: ["dockermqtest_rabbit_1:mq", "dockermqtest_redis_1:redis"]
+                    }
+                }
+            }
+        }).then((container) => {
+            return container.start()
+        }).then((container) => {
+            resolve(container);
+            cb(null, res);
+        }).catch((err)=> {
+            reject(err);
+            return cb(err);
+        })
     })
 }
 
 module.exports = {
-    "restartDocker": restartDocker
+    "restartRaspDocker": restartRaspDocker
 };
