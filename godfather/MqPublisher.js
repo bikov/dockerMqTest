@@ -38,7 +38,7 @@ function sendMessages(ch, id) {
                         workingDockerId = msg.content.toString();
                         setTimeout(()=> {
                             if (!gotMessage) {
-                                winston.warm(`time out rerached and not got message for uuid:${corr}`);
+                                winston.warn(`time out rerached and not got message for uuid:${corr}`);
                                 killDocker(workingDockerId, ch, q, consumerTag, resolve);
                             }
                         }, 5000)
