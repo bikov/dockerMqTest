@@ -31,10 +31,14 @@ function listen() {
                     randomResponse = 'failed'
                 }
                 setTimeout(()=> {
-                    ch.sendToQueue(msg.properties.replyTo,
-                        new Buffer(randomResponse.toString()),
-                        {correlationId: msg.properties.correlationId});
-                    ch.ack(msg);
+                    try {
+                        ch.sendToQueue(msg.properties.replyTo,
+                            new Buffer(randomResponse.toString()),
+                            {correlationId: msg.properties.correlationId});
+                        ch.ack(msg);
+                    }catch(err) {
+                        winston.error(`unnable to return answer for work: ${msg.properties.correlationId}`);
+                    }
                 },timeOut);
             });
         });

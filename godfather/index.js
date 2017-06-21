@@ -4,13 +4,13 @@ let express = require('express'),
     bodyParser = require('body-parser'),
     app = express(),
     mqPublisher = require('./MqPublisher'),
-    redisCheck = require('./redis/redisCheck');
+    rabbitAutoScale = require('./autoScale/rabbitAutoScaler');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 mqPublisher.listen();
-
+rabbitAutoScale.startAutoScale();
 
 module.exports = app;

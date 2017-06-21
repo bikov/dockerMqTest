@@ -5,7 +5,7 @@ let request = require('request'),
     config = require('../config.json'),
     winston = require('winston');
 
-function getMessagesNumber(queueName, cb = ()=> {}) {
+function getReadyMessagesCount(queueName, cb = ()=> {}) {
     return new Promise(function (resolve, reject) {
         let count_url = `http://${config.rabbitmq.user}:${config.rabbitmq.password}@${config.rabbitmq.url}:15672/api/queues/%2f/${queueName}`;
         request({
@@ -37,5 +37,5 @@ function getMessagesNumber(queueName, cb = ()=> {}) {
 }
 
 module.exports = {
-    'getMessagesNumber':getMessagesNumber
+    "getReadyMessagesCount":getReadyMessagesCount
 };

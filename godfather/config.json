@@ -4,5 +4,10 @@
     "user": "bikov",
     "password": "blat",
     "work_q": "rpc_queue"
-  }
+  },
+  "scale":{
+    "inspectInterval" : 100,
+    "extraRaspsCount" : 3
+  },
+  "raspImageName": "bikov/rasp"
 }
