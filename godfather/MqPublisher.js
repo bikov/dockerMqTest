@@ -54,7 +54,7 @@ function sendMessages(ch, id) {
                 }
             }, {consumerTag: consumerTag,noAck: true});
             Math.random() <= config.test.chanceOfFail ? message = 'blat'+new Date().getTime() : message = '1234';
-            ch.sendToQueue('rpc_queue', new Buffer(message + `id:${id}`), {correlationId: corr, replyTo: q.queue,expiration:3000})
+            ch.sendToQueue('rpc_queue', new Buffer(message + `id:${id}`), {correlationId: corr, replyTo: q.queue});
             setTimeout(()=>{
                 if(!workingDockerId)
                     winston.error(`message by uuid: ${corr} expired and lost!`)

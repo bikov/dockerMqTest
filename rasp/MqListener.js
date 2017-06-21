@@ -22,6 +22,10 @@ function listen() {
             ch.prefetch(1);
             winston.info('Listening to work');
             ch.consume(q, function reply(msg) {
+                if(msg.fields.redelivered){
+                    winston.warn(`got redelivered message!!!! send ack for this message to delete from Q`)
+                    ch.ack(msg);
+                }
                 winston.info(`got message ${msg.content.toString()} with uuid: ${msg.properties.correlationId}`);
                 ch.sendToQueue(msg.properties.replyTo,
                     new Buffer(dockerid),

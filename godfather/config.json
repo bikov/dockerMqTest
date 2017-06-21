@@ -12,6 +12,7 @@
   "raspImageName": "bikov/rasp",
   "test":{
     "sendingMessageIntervalInMs":0,
-    "chanceOfFail":0
-  }
+    "chanceOfFail":0.9
+  },
+  "onDockers":false
 }

@@ -3,10 +3,12 @@
  */
 let Docker = require('dockerode'),
     winston = require('winston'),
-    docker = new Docker()
+    config = require('../config.json');
+    docker = new Docker();
 
 function restartRaspDocker(id, cb = ()=>{}) {
     return new Promise((resolve,reject)=> {
+        if(!config.onDockers) resolve();
         winston.info(`restarting container with id  ${id}`);
         let container = docker.getContainer(id);
 
@@ -27,6 +29,7 @@ function restartRaspDocker(id, cb = ()=>{}) {
 
 function startNewRasp(cb = ()=>{}) {
     return new Promise(function (resolve, reject) {
+        if(!config.onDockers) resolve();
         winston.info(`Starting Rasp container`);
         docker.createContainer({
             Image: 'bikov/rasp',
@@ -45,7 +48,7 @@ function startNewRasp(cb = ()=>{}) {
             resolve(container);
             cb(null, res);
         }).catch((err)=> {
-            winston.error(`Unable to restart container with id ${container.id} because ${err}`);
+            winston.error(`Unable to create container because ${err}`);
             reject(err);
             return cb(err);
         })
@@ -54,6 +57,7 @@ function startNewRasp(cb = ()=>{}) {
 
 function getNumberOfRaspContainers(imageName, cb=()=>{}) {
     return new Promise((resolve, reject) => {
+        if(!config.onDockers) resolve();
         docker.listContainers(function (err, containers) {
             if(err){
                 reject(err);
