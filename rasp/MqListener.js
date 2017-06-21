@@ -12,6 +12,9 @@ function listen() {
         conn.on('close', function (reason) {
             return reconnectToMq(reason);
         });
+        conn.on('error',function (error) {
+            winston.error(`mq chanel error: ${error}`)
+        })
         conn.createChannel(function (err, ch) {
             var q = 'rpc_queue';
 

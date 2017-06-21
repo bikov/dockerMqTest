@@ -58,7 +58,7 @@ function sendMessages(ch, id) {
             setTimeout(()=>{
                 if(!workingDockerId)
                     winston.error(`message by uuid: ${corr} expired and lost!`)
-            },3000)
+            },5000)
         })
     });
 }
