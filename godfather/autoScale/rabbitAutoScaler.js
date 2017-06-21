@@ -33,7 +33,7 @@ function scale() {
 
 function getScaleNumber(mesagesCount, curRaspCount, cb = () => {}) {
     return new Promise((resolve) => {
-        let result = ((parseInt(mesagesCount,10) * parseInt(config.scale.extraRaspsIncrease,10)) - parseInt(curRaspCount,10));
+        let result = ((parseInt(mesagesCount,10) * (1 + parseFloat(config.scale.extraRaspsIncrease))) - parseInt(curRaspCount,10));
         if(result < 0){
             result = 0;
         }
