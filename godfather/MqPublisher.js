@@ -15,7 +15,7 @@ function publish(id) {
         });
         conn.createChannel(function(err, ch) {
             if(err) throw err;
-            setInterval(()=>sendMessages(ch,id),500);
+            setInterval(()=>sendMessages(ch,id),250);
         });
     });
 }
@@ -53,7 +53,12 @@ function sendMessages(ch, id) {
                 }
             }, {consumerTag: consumerTag,noAck: true});
             Math.random() >= 0.9 ? message = 'blat'+new Date().getTime() : message = '1234';
-            ch.sendToQueue('rpc_queue', new Buffer(message + `id:${id}`), {correlationId: corr, replyTo: q.queue,expiration:3000});
+            ch.sendToQueue('rpc_queue', new Buffer(message + `id:${id}`), {correlationId: corr, replyTo: q.queue,expiration:3000},function () {
+                setTimeout(()=>{
+                    if(!workingDockerId)
+                        winston.error(`message by uuid: ${corr} expired and lost!`)
+                },3000)
+            });
         })
     });
 }
