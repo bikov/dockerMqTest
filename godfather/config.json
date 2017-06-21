@@ -6,7 +6,7 @@
     "work_q": "rpc_queue"
   },
   "scale":{
-    "inspectInterval" : 100,
+    "inspectInterval" : 1000,
     "extraRaspsCount" : 3
   },
   "raspImageName": "bikov/rasp"

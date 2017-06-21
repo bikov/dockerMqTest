@@ -22,7 +22,7 @@ function getReadyMessagesCount(queueName, cb = ()=> {}) {
                 if (message.hasOwnProperty("messages_ready")) {
                     // this DOES NOT COUNT UnAck msgs
                     let msg_ready = JSON.stringify(message.messages_ready);
-                    winston.info(`message.messages_ready=${msg_ready}`);
+                    winston.info(`ready messages count on rabbit is :${msg_ready}`);
                     resolve(msg_ready);
                     return cb(null, msg_ready);
                 }

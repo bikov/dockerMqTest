@@ -16,8 +16,17 @@ function startRaspAutoScale() {
 
 function scale() {
     rabbitInspector.getReadyMessagesCount(config.rabbitmq.work_q)
+        .then((msgsCount) => {
+            winston.info(`number of rasps now is ${numberOfRasps}`);
+            return msgsCount;
+        })
         .then((msgsCount) => getScaleNumber(msgsCount,numberOfRasps))
-        .then((scaleNumber) => docker.increaseRaspsNumber(scaleNumber))
+        .then((scaleNumber) => {
+            docker.increaseRaspsNumber(scaleNumber);
+            return scaleNumber;
+        })
+        .then((scaleNumber) => numberOfRasps += scaleNumber)
+        .then(() => winston.info(`after scale number of rasps is${numberOfRasps}`))
         .catch((err) => winston.error(`cannot scale because ${err}`))
 }
 
