@@ -12,7 +12,7 @@ function getReadyMessagesCount(queueName, cb = ()=> {}) {
             url : count_url
         }, function(err, response, body) {
             if (err) {
-                winston.error(`Unable to fetch Queued Msgs Count because: ${err}`);
+                winston.error(`Unable to fetch Queued Message Count because: ${err}`);
                 reject(err);
                 return cb(err);
             }

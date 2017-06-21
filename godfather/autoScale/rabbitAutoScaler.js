@@ -18,6 +18,7 @@ function scale() {
     rabbitInspector.getReadyMessagesCount(config.rabbitmq.work_q)
         .then((msgsCount) => getScaleNumber(msgsCount,numberOfRasps))
         .then((scaleNumber) => docker.increaseRaspsNumber(scaleNumber))
+        .catch((err) => winston.error(`cannot scale because ${err}`))
 }
 
 function getScaleNumber(mesagesCount, curRaspCount, cb = () => {}) {
