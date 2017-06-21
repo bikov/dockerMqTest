@@ -11,11 +11,9 @@ function restartRaspDocker(id, cb = ()=>{}) {
             container = docker.getContainer(id);
 
         container.kill({t:0})
-            .then(function (container) {
-                return container.remove()
-            }).then(function (data) {
-                winston.info(`container by id ${id} killed and removed`)
-            }).then(() => startNewRasp(docker))
+            .then((container) => container.remove())
+            .then((data) => winston.info(`container by id ${id} killed and removed`))
+            .then(() => startNewRasp(docker))
             .then((container) => {
                 winston.info(`container with id ${container.id} started`);
                 resolve(container);
