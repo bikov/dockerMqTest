@@ -67,8 +67,8 @@ function killDocker(workingDockerId, ch, q, consumerTag, resolve) {
     winston.warn(`5 seconds no response, cancelling consume to callback and killing docker with id: ${workingDockerId}`);
     ch.deleteQueue(q.queue);
     ch.cancel(consumerTag);
-    dockerHelper.restartRaspDocker(workingDockerId).then(resolve).catch(()=> {
-        winston.error(`unnable to kill container with id ${workingDockerId}`);
+    dockerHelper.restartRaspDocker(workingDockerId).then(resolve).catch((err)=> {
+        winston.error(`unnable to kill container with id ${workingDockerId} because: ${err}`);
         resolve();
     });
     //resolve();
