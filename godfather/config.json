@@ -11,11 +11,11 @@
   },
   "security":{
     "waitUntillKillInMs":2000
-  }
+  },
   "raspImageName": "bikov/rasp",
   "test":{
-    "sendingMessageIntervalInMs":100,
+    "sendingMessageIntervalInMs":250,
     "chanceOfFail":0.1
   },
-  "onDockers":false
+  "onDockers":true
 }
