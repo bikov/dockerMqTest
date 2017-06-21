@@ -22,6 +22,7 @@ function scale() {
         })
         .then((msgsCount) => getScaleNumber(msgsCount,numberOfRasps))
         .then((scaleNumber) => {
+            winston.info(`before increaseRaspsNumber function, scale number is ${scaleNumber}`);
             docker.increaseRaspsNumber(scaleNumber);
             return scaleNumber;
         })
@@ -32,10 +33,11 @@ function scale() {
 
 function getScaleNumber(mesagesCount, curRaspCount, cb = () => {}) {
     return new Promise((resolve) => {
-        let result = ((mesagesCount + config.scale.extraRaspsCount) - curRaspCount);
+        let result = ((mesagesCount + 3) - curRaspCount);
         if(result < 0){
             result = 0;
         }
+        winston.info(`in getScaleNumber function, returning result of ${result}`);
         resolve(result);
         cb(result);
     })
