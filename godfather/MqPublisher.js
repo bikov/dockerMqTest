@@ -34,10 +34,11 @@ function sendMessages(ch, id) {
                 if(msg && msg.properties.correlationId == corr)
                 {
                     if(!workingDockerId){
-                        winston.info(`working docker id is:${msg.content.toString()}`);
+                        winston.info(`working docker id is:${msg.content.toString()} for uuid: ${corr}`);
                         workingDockerId = msg.content.toString();
                         setTimeout(()=> {
                             if (!gotMessage) {
+                                winston.info(`time out rerached and not got message for uuid:${corr}`);
                                 killDocker(workingDockerId, ch, q, consumerTag, resolve);
                             }
                         }, 5000)
