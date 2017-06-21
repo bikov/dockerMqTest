@@ -7,10 +7,11 @@
   },
   "scale":{
     "inspectInterval" : 1000,
-    "extraRaspsCount" : 3
+    "extraRaspsIncrease" : 0.3
   },
   "raspImageName": "bikov/rasp",
   "test":{
-    "sendingMessageIntervalInMs":100
+    "sendingMessageIntervalInMs":100,
+    "chanceOfFail":0.1
   }
 }
