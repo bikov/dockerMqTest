@@ -11,7 +11,7 @@
   },
   "raspImageName": "bikov/rasp",
   "test":{
-    "sendingMessageIntervalInMs":100,
+    "sendingMessageIntervalInMs":500,
     "chanceOfFail":0.1
   }
 }
